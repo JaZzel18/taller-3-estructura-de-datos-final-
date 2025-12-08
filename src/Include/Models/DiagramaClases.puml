@@ -1,0 +1,108 @@
+@startuml
+
+
+skin rose
+
+package Models {
+class AVL {
+    - NodoAVL raiz
+    + AVL()
+    + insertar(p: Persona)
+    + inOrden()
+    + getRaiz(): NodoAVL
+    + buscarPorNombre(nombre: string): NodoAVL
+}
+
+class NodoAVL {
+    + Persona persona
+    + NodoAVL izquierda
+    + NodoAVL derecha
+    + int altura
+    + NodoAVL(p: Persona)
+}
+
+class Persona {
+    - int id
+    - string nombre
+    - string rol
+    - string atributo
+    - MinHeap partidas
+    + Persona()
+    + Persona(id: int, nombre: string, rol: string, atributo: string)
+    + getId(): int
+    + getNombre(): string
+    + getRol(): string
+    + getAtributo(): string
+    + getPartidas(): MinHeap
+}
+
+class MinHeap {
+    - Partida[] arr
+    - int capacidad
+    - int size
+    - heapifyUp(i: int)
+    - heapifyDown(i: int)
+    - expandir()
+    + MinHeap()
+    + ~MinHeap()
+    + insertar(p: Partida)
+    + vacio(): bool
+    + getSize(): int
+    + getElementos(): Partida[]
+    + mostrar()
+}
+
+class Partida {
+    - int id
+    - string nombreJuego
+    - int puntaje
+    + Partida()
+    + Partida(id: int, juego: string, puntaje: int)
+    + getId(): int
+    + getJuego(): string
+    + getPuntaje(): int
+    + setPuntaje(p: int)
+}
+}
+
+package Utils {
+class Menu {
+    - AVL arbolPersonas
+    - LecturaArchivo lector
+    + Menu()
+    + menuPrincipal()
+    + agregarPersona()
+    + mostrarReporteGeneral()
+    + entregaChoripanes()
+    + guiaJustinBieber()
+    + adivinarPuntajes()
+    + ~Menu()
+}
+
+class LecturaArchivo {
+    + static cargarPersonas(ruta: string, arbol: AVL)
+    + static cargarPartidas(ruta: string, arbol: AVL)
+}
+
+
+}
+
+class Main {
+    + main(): int
+}
+
+Main "1" --> "1" Menu : ejecuta
+
+Menu "1" --> "1" AVL : usa
+Menu "1" --> "1" LecturaArchivo : usa
+
+AVL "1" --> "0..*" NodoAVL : contiene
+NodoAVL "1" --> "1" Persona : contiene
+
+Persona "1" --> "1" MinHeap : contiene
+MinHeap "1" --> "0..*" Partida : contiene
+
+LecturaArchivo "1" --> "0..*" Persona : crea
+LecturaArchivo "1" --> "0..*" Partida : crea
+LecturaArchivo "1" --> "1" AVL : inserta
+@enduml
